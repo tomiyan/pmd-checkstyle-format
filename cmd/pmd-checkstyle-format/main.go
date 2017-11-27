@@ -8,7 +8,7 @@ import (
 	"encoding/xml"
 )
 
-var version = "0.0.1"
+var version = "0.0.2"
 
 func main() {
 	var showVersion bool
@@ -20,7 +20,7 @@ func main() {
 		return
 	}
 
-	err, result := format.PmdParser{}.Parse(os.Stdin)
+	result, err := format.PmdParser{}.Parse(os.Stdin)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "pmd-checkstyle-format: %v\n", err)
 		os.Exit(1)

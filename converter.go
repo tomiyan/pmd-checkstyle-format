@@ -1,4 +1,4 @@
-package pmd_checkstyle_format
+package pmd2cs
 
 import (
 	"encoding/xml"
@@ -8,13 +8,14 @@ import (
 	"fmt"
 )
 
-// PmdStyleParser.
+// PmdParser is a struct PHPMD xml parser.
 type PmdParser struct{}
 
-func (PmdParser) Parse(r io.Reader) (error, *CheckStyleResult) {
+// Parse is a function parse PHPMD xml result to checkstyle xml.
+func (PmdParser) Parse(r io.Reader) (*CheckStyleResult, error) {
 	var decoder = new(PmdResult)
 	if err := xml.NewDecoder(r).Decode(decoder); err != nil {
-		return err, nil
+		return nil, err
 	}
 	var csFiles []*CheckStyleFile
 	for _, file := range decoder.Files {
@@ -29,7 +30,7 @@ func (PmdParser) Parse(r io.Reader) (error, *CheckStyleResult) {
 			default:
 				severity = "info"
 			}
-			message := fmt.Sprintf("rule: %s, message: %s, externalInfoUrl: %s", violation.Rule, strings.TrimSpace(violation.Message), violation.ExternalInfoUrl)
+			message := fmt.Sprintf("rule: %s, message: %s, externalInfoUrl: %s", violation.Rule, strings.TrimSpace(violation.Message), violation.ExternalInfoURL)
 			csError := &CheckStyleError{
 				Line:    violation.BeginLine,
 				Message: message,
@@ -46,10 +47,10 @@ func (PmdParser) Parse(r io.Reader) (error, *CheckStyleResult) {
 	csResult := &CheckStyleResult{
 		Files: csFiles,
 	}
-	return nil, csResult
+	return csResult, nil
 }
 
-// CheckStyleResult represents pmd XML result.
+// PmdResult represents pmd XML result.
 // <?xml version="1.0" encoding="UTF-8" ?><pmd version="@project.version@" timestamp="2017-11-26T06:00:10+00:00"><file ...></file>...</pmd>
 //
 // References:
@@ -61,19 +62,19 @@ type PmdResult struct {
 	Files     []*PmdFile `xml:"file,omitempty"`
 }
 
-// CheckStyleFile represents <file name="fname"><error ... />...</file>
+// PmdFile represents <file name="fname"><error ... />...</file>
 type PmdFile struct {
 	Name       string          `xml:"name,attr"`
 	Violations []*PmdViolation `xml:"violation"`
 }
 
-// CheckStyleError represents <violation beginline="8" endline="8" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3"> Avoid unused local variables such as '$hoge'.</violation>
+// PmdViolation represents <violation beginline="8" endline="8" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3"> Avoid unused local variables such as '$hoge'.</violation>
 type PmdViolation struct {
 	BeginLine       int    `xml:"beginline,attr,omitempty"`
 	EndLine         int    `xml:"endline,attr,omitempty"`
 	Rule            string `xml:"rule,attr,omitempty"`
 	Ruleset         string `xml:"ruleset,attr,omitempty"`
-	ExternalInfoUrl string `xml:"externalInfoUrl,attr,omitempty"`
+	ExternalInfoURL string `xml:"externalInfoUrl,attr,omitempty"`
 	Priority        int    `xml:"priority,attr"`
 	Package         string `xml:"package,attr,omitempty"`
 	Class           string `xml:"class,attr,omitempty"`
