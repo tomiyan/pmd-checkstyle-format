@@ -6,25 +6,40 @@ import (
 	"os"
 	format "github.com/tomiyan/pmd2cs"
 	"encoding/xml"
+	"io"
 )
 
-var version = "0.0.3"
+const version = "0.0.4"
+
+type option struct {
+	version bool
+}
+
+var opt = &option{}
+
+func init() {
+	flag.BoolVar(&opt.version, "v", false, "show version")
+	flag.BoolVar(&opt.version ,"version", false, "show version")
+}
 
 func main() {
-	var showVersion bool
-	flag.BoolVar(&showVersion, "v", false, "show version")
-	flag.BoolVar(&showVersion ,"version", false, "show version")
 	flag.Parse()
-	if showVersion {
-		fmt.Println("version:", version)
-		return
-	}
 
-	result, err := format.PmdParser{}.Parse(os.Stdin)
-	if err != nil {
+	if err := run(os.Stdin, os.Stdout, opt); err != nil {
 		fmt.Fprintf(os.Stderr, "pmd2cs: %v\n", err)
 		os.Exit(1)
-		return
+	}
+}
+
+func run(r io.Reader, w io.Writer, o *option) error {
+	if o.version {
+		fmt.Fprintln(w, version)
+		return nil
+	}
+
+	result, err := format.PmdParser{}.Parse(r)
+	if err != nil {
+		return err
 	}
 
 	var data []byte
@@ -32,5 +47,6 @@ func main() {
 	xmlData, err := xml.MarshalIndent(result, "", "    ")
 
 	data = append(data, xmlData...)
-	fmt.Println(string(data))
+	fmt.Fprintln(w, string(data))
+	return nil
 }
