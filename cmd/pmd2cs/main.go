@@ -4,11 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	format "github.com/tomiyan/pmd-checkstyle-format"
+	format "github.com/tomiyan/pmd2cs"
 	"encoding/xml"
 )
 
-var version = "0.0.2"
+var version = "0.0.3"
 
 func main() {
 	var showVersion bool
@@ -22,7 +22,7 @@ func main() {
 
 	result, err := format.PmdParser{}.Parse(os.Stdin)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "pmd-checkstyle-format: %v\n", err)
+		fmt.Fprintf(os.Stderr, "pmd2cs: %v\n", err)
 		os.Exit(1)
 		return
 	}

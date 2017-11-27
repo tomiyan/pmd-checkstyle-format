@@ -1,4 +1,4 @@
-# pmd-checkstyle-format - PHPMD convert to checktyle
+# pmd2cs - PHPMD convert to checktyle
 
 * Inspired by
   * https://github.com/noboru-i/pmd_translate_checkstyle_format
