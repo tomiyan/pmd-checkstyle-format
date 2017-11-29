@@ -6,6 +6,7 @@ jobs:
   working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
   steps:
    - checkout
+   - run: export GOPATH=/home/circleci/go
    - run: go get -v -t -d ./...
    - run: go get github.com/golang/lint/golint
    - run: go get github.com/mattn/goveralls
