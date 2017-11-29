@@ -1,0 +1,13 @@
+version: 2
+jobs:
+ build:
+  docker:
+   - image: circleci/golang:1.9
+  working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
+  steps:
+   - checkout
+   - run: go get -v -t -d ./...
+   - run: go get github.com/golang/lint/golint
+   - run: golint ./...
+   - run: go vet ./...
+   - run: go test -v -race ./...

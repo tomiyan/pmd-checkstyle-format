@@ -1,9 +1,9 @@
 package main
 
 import (
-	"testing"
 	"bytes"
 	"strings"
+	"testing"
 )
 
 func TestRun_version(t *testing.T) {

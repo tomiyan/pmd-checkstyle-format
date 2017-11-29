@@ -2,10 +2,10 @@ package pmd2cs
 
 import (
 	"encoding/xml"
+	"fmt"
 	"io"
 	"strings"
 	"time"
-	"fmt"
 )
 
 // PmdParser is a struct PHPMD xml parser.
@@ -32,8 +32,8 @@ func (PmdParser) Parse(r io.Reader) (*CheckStyleResult, error) {
 			}
 			message := fmt.Sprintf("rule: %s, message: %s, externalInfoUrl: %s", violation.Rule, strings.TrimSpace(violation.Message), violation.ExternalInfoURL)
 			csError := &CheckStyleError{
-				Line:    violation.BeginLine,
-				Message: message,
+				Line:     violation.BeginLine,
+				Message:  message,
 				Severity: severity,
 			}
 			csErrors = append(csErrors, csError)

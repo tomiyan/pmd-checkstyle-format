@@ -1,12 +1,12 @@
 package main
 
 import (
+	"encoding/xml"
 	"flag"
 	"fmt"
-	"os"
 	"github.com/tomiyan/pmd2cs"
-	"encoding/xml"
 	"io"
+	"os"
 )
 
 const version = "0.0.4"
@@ -19,7 +19,7 @@ var opt = &option{}
 
 func init() {
 	flag.BoolVar(&opt.version, "v", false, "show version")
-	flag.BoolVar(&opt.version ,"version", false, "show version")
+	flag.BoolVar(&opt.version, "version", false, "show version")
 }
 
 func main() {
@@ -36,7 +36,6 @@ func run(r io.Reader, w io.Writer, o *option) error {
 		fmt.Fprintln(w, version)
 		return nil
 	}
-
 	result, err := pmd2cs.PmdParser{}.Parse(r)
 	if err != nil {
 		return err
