@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	format "github.com/tomiyan/pmd2cs"
+	"github.com/tomiyan/pmd2cs"
 	"encoding/xml"
 	"io"
 )
@@ -37,7 +37,7 @@ func run(r io.Reader, w io.Writer, o *option) error {
 		return nil
 	}
 
-	result, err := format.PmdParser{}.Parse(r)
+	result, err := pmd2cs.PmdParser{}.Parse(r)
 	if err != nil {
 		return err
 	}
