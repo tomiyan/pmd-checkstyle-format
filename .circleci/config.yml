@@ -1,6 +1,9 @@
 version: 2
 jobs:
  build:
+  environment:
+    GOPATH: /home/circleci/go
+    PATH: $GOPATH/bin/:$PATH
   docker:
    - image: circleci/golang:1.9
   working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
