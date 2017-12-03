@@ -7,10 +7,10 @@ jobs:
    - image: circleci/golang:1.9
   working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
   steps:
+   - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
    - checkout
    - run: go get -v -t -d ./...
    - run: go get github.com/golang/lint/golint
-   - run: go get github.com/mattn/goveralls
    - run: go get github.com/haya14busa/goverage
    - run: golint ./...
    - run: go vet ./...
