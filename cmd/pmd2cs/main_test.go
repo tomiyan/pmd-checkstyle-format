@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+	"github.com/tomiyan/pmd2cs"
+	"encoding/xml"
 )
 
 func TestRun_version(t *testing.T) {
@@ -16,5 +18,19 @@ func TestRun_version(t *testing.T) {
 	}
 	if got := strings.TrimRight(stdout.String(), "\n"); got != version {
 		t.Errorf("version = %v, want %v", got, version)
+	}
+}
+
+func TestConvertXMLString(t *testing.T) {
+	csr := &pmd2cs.CheckStyleResult{
+		XMLName: xml.Name{},
+	}
+	got, err := convertXMLString(csr)
+	if err != nil {
+		t.Error(err)
+	}
+	expected := strings.Join([]string{xml.Header, "<checkstyle></checkstyle>"}, "")
+	if got != expected {
+		t.Errorf("got %v, want %v", got, expected)
 	}
 }
