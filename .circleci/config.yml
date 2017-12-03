@@ -8,12 +8,12 @@ jobs:
    - image: circleci/golang:1.9
   working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
   steps:
-   - checkout
    - run: echo $HOME
    - run: echo $PATH
    - run: echo $GOPATH
    - run: echo $GOROOT
    - run: go env
+   - checkout
    - run: go get -v -t -d ./...
    - run: go get github.com/golang/lint/golint
    - run: go get github.com/mattn/goveralls
