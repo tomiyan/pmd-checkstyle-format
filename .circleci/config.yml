@@ -3,19 +3,17 @@ jobs:
  build:
   environment:
     - GOPATH: /home/circleci/go
-    - PATH: $GOPATH/bin/:$PATH
   docker:
    - image: circleci/golang:1.9
   working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
   steps:
+   - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
    - checkout
-   - run: go env
    - run: go get -v -t -d ./...
    - run: go get github.com/golang/lint/golint
-   - run: go get github.com/mattn/goveralls
    - run: go get github.com/haya14busa/goverage
    - run: golint ./...
    - run: go vet ./...
    - run: go test -v -race ./...
    - run: goverage -coverprofile=/home/circleci/coverage.out ./...
-   - run: goveralls -coverprofile=/home/circleci/coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN
+   - run: bash <(curl -s https://codecov.io/bash)
