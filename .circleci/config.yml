@@ -7,12 +7,6 @@ jobs:
    - image: circleci/golang:1.9
   working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
   steps:
-   - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
-   - run: echo $HOME
-   - run: echo $PATH
-   - run: echo $GOPATH
-   - run: echo $GOROOT
-   - run: go env
    - checkout
    - run: go get -v -t -d ./...
    - run: go get github.com/golang/lint/golint
@@ -22,5 +16,4 @@ jobs:
    - run: go vet ./...
    - run: go test -v -race ./...
    - run: goverage -coverprofile=/home/circleci/coverage.out ./...
-   - run: goveralls -coverprofile=/home/circleci/coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN
    - run: bash <(curl -s https://codecov.io/bash)
