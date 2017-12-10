@@ -7,6 +7,7 @@ import (
 	"github.com/tomiyan/pmd2cs"
 	"io"
 	"os"
+	"strings"
 )
 
 const version = "0.0.4"
@@ -36,16 +37,25 @@ func run(r io.Reader, w io.Writer, o *option) error {
 		fmt.Fprintln(w, version)
 		return nil
 	}
+
 	result, err := pmd2cs.PmdParser{}.Parse(r)
 	if err != nil {
 		return err
 	}
 
-	var data []byte
-	data = append(data, []byte(xml.Header)...)
-	xmlData, err := xml.MarshalIndent(result, "", "    ")
+	xml, err := convertXMLString(result)
+	if err != nil {
+		return err
+	}
 
-	data = append(data, xmlData...)
-	fmt.Fprintln(w, string(data))
+	fmt.Fprintln(w, xml)
 	return nil
+}
+
+func convertXMLString(body *pmd2cs.CheckStyleResult) (string, error) {
+	formattedBody, err := xml.MarshalIndent(body, "", "    ")
+	if err != nil {
+		return "", err
+	}
+	return strings.Join([]string{xml.Header, string(formattedBody)}, ""), nil
 }

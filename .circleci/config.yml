@@ -1,19 +1,35 @@
 version: 2
 jobs:
- build:
-  environment:
-    - GOPATH: /home/circleci/go
-  docker:
-   - image: circleci/golang:1.9
-  working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
-  steps:
-   - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
-   - checkout
-   - run: go get -v -t -d ./...
-   - run: go get github.com/golang/lint/golint
-   - run: go get github.com/haya14busa/goverage
-   - run: golint ./...
-   - run: go vet ./...
-   - run: go test -v -race ./...
-   - run: goverage -coverprofile=/home/circleci/go/src/github.com/tomiyan/pmd2cs/coverage.text ./...
-   - run: bash <(curl -s https://codecov.io/bash)
+  build:
+    environment:
+      - GOPATH: /home/circleci/go
+    docker:
+      - image: circleci/golang:1.9
+    working_directory: /home/circleci/go/src/github.com/tomiyan/pmd2cs
+    steps:
+      - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
+      - checkout
+      - run: go get -v -t -d ./...
+      - run: go get github.com/golang/lint/golint
+      - run: go get github.com/haya14busa/goverage
+      - run: golint ./...
+      - run: go vet ./...
+      - run: go test -v -race ./...
+      - run: goverage -coverprofile=./coverage.text ./...
+      - run: bash <(curl -s https://codecov.io/bash)
+  deploy:
+    filters:
+      tags:
+        only: /^v\d+\.\d+\.\d+$/
+    branches:
+      ignore: /.*/
+    environment:
+      - GOPATH: /home/circleci/go
+    docker:
+     - image: circleci/golang:1.9
+    steps:
+      - run: echo 'export PATH=${GOPATH}/bin/:${PATH}' >> $BASH_ENV
+      - checkout
+      - run: go env
+      - run: go get -v -t -d ./...
+      - run: go get github.com/tcnksm/ghr
