@@ -34,14 +34,14 @@ workflows:
   build:
     jobs:
       - build:
-        filters:
-          branch:
-            only: /.*/
+          filters:
+            branch:
+              only: /.*/
   deploy:
     jobs:
       - deploy:
-        filters:
-          tags:
-            only: /v[0-9]+(\.[0-9]+)*/
-          branch:
-            ignore: /.*/
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branch:
+              ignore: /.*/
