@@ -21,8 +21,8 @@ jobs:
     filters:
       tags:
         only: /^v\d+\.\d+\.\d+$/
-    branches:
-      ignore: /.*/
+      branches:
+        ignore: /.*/
     environment:
       - GOPATH: /home/circleci/go
     docker:
