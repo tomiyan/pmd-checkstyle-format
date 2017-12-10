@@ -18,9 +18,6 @@ jobs:
       - run: goverage -coverprofile=./coverage.text ./...
       - run: bash <(curl -s https://codecov.io/bash)
   deploy:
-    filters:
-      tags:
-        only: /v[0-9]+(\.[0-9]+)*/
     environment:
       - GOPATH: /home/circleci/go
     docker:
@@ -31,3 +28,15 @@ jobs:
       - run: go env
       - run: go get -v -t -d ./...
       - run: go get github.com/tcnksm/ghr
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
