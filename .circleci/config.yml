@@ -35,7 +35,7 @@ workflows:
     jobs:
       - build:
           filters:
-            branchs:
+            branches:
               only: /.*/
   deploy:
     jobs:
