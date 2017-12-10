@@ -27,7 +27,10 @@ jobs:
       - checkout
       - run: go env
       - run: go get -v -t -d ./...
+      - run: go get github.com/mitchellh/gox
       - run: go get github.com/tcnksm/ghr
+      - run: gox -output "${$GOPATH}/pkg/{{.Dir}}_{{.OS}}_{{.Arch}}"  ./ ./...
+      - run: ghr $CIRCLE_TAG $GOPATH/pkg/
 
 workflows:
   version: 2
