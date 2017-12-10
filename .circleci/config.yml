@@ -38,3 +38,14 @@ jobs:
       - run: gox -output "${GOPATH}/pkg/{{.Dir}}_{{.OS}}_{{.Arch}}"  ./ ./...
       - run: ghr -u $CIRCLE_PROJECT_USERNAME $CIRCLE_TAG $GOPATH/pkg/
 
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: /.*/
+  deploy:
+    jobs:
+      - deploy
