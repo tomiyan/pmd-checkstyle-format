@@ -17,6 +17,8 @@ jobs:
       - run: go test -v -race ./...
       - run: goverage -coverprofile=./coverage.text ./...
       - run: bash <(curl -s https://codecov.io/bash)
+      - store_artifacts:
+          path: ./coverage.text
   deploy:
     environment:
       - GOPATH: /home/circleci/go

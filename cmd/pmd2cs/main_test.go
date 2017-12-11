@@ -21,6 +21,16 @@ func TestRun_version(t *testing.T) {
 	}
 }
 
+func TestRun_eof(t *testing.T) {
+	stdout := new(bytes.Buffer)
+	if err := run(new(bytes.Buffer), stdout, opt); err != nil {
+		t.Error(err)
+	}
+	if stdout.String() != "" {
+		t.Error("not empty")
+	}
+}
+
 func TestConvertXMLString(t *testing.T) {
 	csr := &pmd2cs.CheckStyleResult{
 		XMLName: xml.Name{},

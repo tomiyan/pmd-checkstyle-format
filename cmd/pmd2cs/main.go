@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const version = "0.0.12"
+const version = "0.0.14"
 
 type option struct {
 	version bool
@@ -39,6 +39,10 @@ func run(r io.Reader, w io.Writer, o *option) error {
 	}
 
 	result, err := pmd2cs.PmdParser{}.Parse(r)
+	if err == io.EOF {
+		return nil
+	}
+
 	if err != nil {
 		return err
 	}
